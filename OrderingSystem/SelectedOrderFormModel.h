@@ -21,7 +21,7 @@ public:
 
 signals:
     void calcTotalPrice();
-    void cookBookCountChanged(int id, int classilyId, int nCount);
+    void cookBookCountChanged(QString id, QString classilyId, int nCount);
 
 public slots:
     void addCook(CookBookSelectedInfo *pCookBookSelectedInfo);
@@ -34,7 +34,7 @@ private:
      * @param id  菜品ID
      * @return
      */
-    int findCookBookItem(int id);
+    int findCookBookItem(QString id);
 
 public:
     QModelIndex index(int row, int column, const QModelIndex &parent) const;

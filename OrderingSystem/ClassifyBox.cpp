@@ -2,6 +2,10 @@
 #include <QHBoxLayout>
 #include <QVariant>
 
+#include "sqlUtils/sqlUntils.h"
+#include <QSqlQuery>
+#include "sqlUtils/entity/menuTypeEntity.h"
+
 ClassifyBox::ClassifyBox(QWidget *parent) :
     QWidget(parent)
   , m_pClassilyWidgetLayout(NULL)
@@ -22,6 +26,11 @@ int ClassifyBox::getClassifyCount() const
     return m_oBtnList.count();
 }
 
+QVector<menuTypeEntity *> ClassifyBox::getMenuTypeList() const
+{
+    return m_pClassilyTypeEntityList;
+}
+
 void ClassifyBox::onSwitchPage()
 {
     for (int i = 0; i < m_oBtnList.count(); ++i)
@@ -39,52 +48,52 @@ void ClassifyBox::onSwitchPage()
 
 void ClassifyBox::onAddClassily()
 {
-    m_oClassilyNameList << QStringLiteral("推    d");
-    QToolButton *p = new QToolButton(this);
-    p->setFixedWidth(150);
-    p->setFixedHeight(50);
-    p->setCheckable(true);
-    p->setProperty("ClassilyId", m_oClassilyNameList.count() - 1);
-    p->setText(m_oClassilyNameList[m_oClassilyNameList.count() - 1]);
+//    m_oClassilyNameList << QStringLiteral("推    d");
+//    QToolButton *p = new QToolButton(this);
+//    p->setFixedWidth(150);
+//    p->setFixedHeight(50);
+//    p->setCheckable(true);
+//    p->setProperty("ClassilyId", m_oClassilyNameList.count() - 1);
+//    p->setText(m_oClassilyNameList[m_oClassilyNameList.count() - 1]);
 
-    connect(p, &QToolButton::clicked, this, &ClassifyBox::onSwitchPage);
-    m_oBtnList.append(p);
+//    connect(p, &QToolButton::clicked, this, &ClassifyBox::onSwitchPage);
+//    m_oBtnList.append(p);
 
-    updateLayout();
+//    updateLayout();
 
-    emit addCookBookClassilyPage();
+//    emit addCookBookClassilyPage();
 }
 
 void ClassifyBox::onDeleteClassily()
 {
-    if (m_oBtnList.count() <= 1)
-    {
-        return ;
-    }
+//    if (m_oBtnList.count() <= 1)
+//    {
+//        return ;
+//    }
 
-    for (int i = 0; i < m_oBtnList.count(); ++i)
-    {
-        if (m_oBtnList[i]->isChecked())
-        {
-            m_oClassilyNameList.removeAt(i);
-            delete m_oBtnList[i];
-            m_oBtnList.remove(i);
+//    for (int i = 0; i < m_oBtnList.count(); ++i)
+//    {
+//        if (m_oBtnList[i]->isChecked())
+//        {
+//            m_oClassilyNameList.removeAt(i);
+//            delete m_oBtnList[i];
+//            m_oBtnList.remove(i);
 
-            emit removeCookBookClassilyPage(i);
+//            emit removeCookBookClassilyPage(i);
 
-            if (i > 0)
-            {
-                emit m_oBtnList[i - 1]->click();
-            }
-            else
-            {
-                emit m_oBtnList[0]->click();
-            }
+//            if (i > 0)
+//            {
+//                emit m_oBtnList[i - 1]->click();
+//            }
+//            else
+//            {
+//                emit m_oBtnList[0]->click();
+//            }
 
-            break;
-        }
-    }
-    updateLayout();
+//            break;
+//        }
+//    }
+//    updateLayout();
 }
 
 void ClassifyBox::onEditClassily()
@@ -94,21 +103,36 @@ void ClassifyBox::onEditClassily()
 
 void ClassifyBox::init()
 {
-    m_oClassilyNameList << QStringLiteral("推    荐") << QStringLiteral("凉    菜") << QStringLiteral("热    菜")
-             << QStringLiteral("硬    菜") << QStringLiteral("酒    水") << QStringLiteral("小    吃") << QStringLiteral("主    食");
-    for (int i = 0; i < m_oClassilyNameList.count(); ++i)
+    QSqlQuery query = sqlUntils::getSqlUntils()->execSql("SELECT * FROM menu_type ORDER BY sort_index ASC");
+
+    while(query.next())
+    {
+        menuTypeEntity *ent = new menuTypeEntity();
+        ent->setType_id(query.value("type_id").toString());
+        ent->setType_name(query.value("type_name").toString());
+        ent->setImage(query.value("image").toString());
+
+        m_pClassilyTypeEntityList.append(ent);
+
+    }
+
+    for (int i = 0; i < m_pClassilyTypeEntityList.count(); ++i)
     {
         QToolButton *p = new QToolButton(this);
         p->setFixedWidth(150);
         p->setFixedHeight(50);
         p->setCheckable(true);
         p->setProperty("ClassilyId", QVariant(i));
-        p->setText(m_oClassilyNameList[i]);
+        p->setProperty("type_id", m_pClassilyTypeEntityList[i]->getType_id());
+        p->setText(m_pClassilyTypeEntityList[i]->getType_name());
 
         connect(p, &QToolButton::clicked, this, &ClassifyBox::onSwitchPage);
         m_oBtnList.append(p);
     }
-    m_oBtnList[0]->setChecked(true);
+    if (m_oBtnList.length() != 0)
+    {
+        m_oBtnList[0]->setChecked(true);
+    }
 
     m_pClassilyWidgetLayout = new QVBoxLayout;
     m_pClassilyWidgetLayout->setMargin(0);

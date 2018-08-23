@@ -21,7 +21,7 @@ void OrderingWidget::init()
     m_pCookBookMainWidget = new CookBookMain(this);
 
     connect(m_pCookBookMainWidget, SIGNAL(addCook(CookBookSelectedInfo *)), m_pSelectedWidget, SLOT(onAddCook(CookBookSelectedInfo*)));
-    connect(m_pSelectedWidget, SIGNAL(cookBookCountChanged(int ,int ,int)), m_pCookBookMainWidget, SLOT(onCookBookCountChanged(int, int, int)));
+    connect(m_pSelectedWidget, SIGNAL(cookBookCountChanged(QString ,QString ,int)), m_pCookBookMainWidget, SLOT(onCookBookCountChanged(QString, QString, int)));
 
     QHBoxLayout *pMainLayout = new QHBoxLayout;
     pMainLayout->setMargin(1);

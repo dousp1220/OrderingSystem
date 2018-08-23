@@ -7,6 +7,8 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
+
+class menuTypeEntity;
 /**
  * @brief 左边菜品分类界面
  */
@@ -19,6 +21,8 @@ public:
     ~ClassifyBox();
 
     int getClassifyCount() const;
+
+    QVector<menuTypeEntity*> getMenuTypeList() const;
 
 signals:
     void switchCookBookClassilyPage(int index);
@@ -47,7 +51,7 @@ private:
     QPushButton *m_pDeleteBtn;
     QPushButton *m_pEditBtn;
 
-    QStringList m_oClassilyNameList;
+    QVector<menuTypeEntity*> m_pClassilyTypeEntityList;
 };
 
 #endif // CLASSIFYBOX_H

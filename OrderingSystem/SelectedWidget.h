@@ -25,12 +25,12 @@ public:
 public slots:
     void onAddCook(CookBookSelectedInfo* pCookBookSelectedInfo);
     void totalPrice();
-    void onCookBookCountChanged(int id, int classilyId, int nCount);
+    void onCookBookCountChanged(QString id, QString classilyId, int nCount);
     void onConfirmOrder();
     void onCancelOrder();
 
 signals:
-    void cookBookCountChanged(int id, int classilyId, int nCount);
+    void cookBookCountChanged(QString id, QString classilyId, int nCount);
 
 private:
     void init();

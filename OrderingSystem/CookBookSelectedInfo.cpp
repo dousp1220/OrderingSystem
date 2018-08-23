@@ -1,55 +1,31 @@
 ﻿#include "CookBookSelectedInfo.h"
 
-CookBookSelectedInfo::CookBookSelectedInfo(int id, int classilyId, QString name, float price, QString image, int addedCount, QString remarks)
-    : m_nId(id)
-    , m_nClassilyId(classilyId)
-    , m_strName(name)
-    , m_fPrice(price)
-    , m_strImageUrl(image)
-    , m_nAddedCount(addedCount)
+CookBookSelectedInfo::CookBookSelectedInfo(int addedCount, QString remarks)
+    : m_nAddedCount(addedCount)
     , m_strRemarks(remarks)
 {
 
 }
 
-int CookBookSelectedInfo::id() const
+CookBookSelectedInfo::CookBookSelectedInfo(CookBookItemInfo *info, int addedCount, QString remarks)
 {
-    return m_nId;
+    this->setMenu_id(info->getMenu_id());
+    this->setMenu_name(info->getMenu_name());
+    this->setMenu_image(info->getMenu_image());
+    this->setPrice(info->getPrice());
+    this->setNew_price(info->getNew_price());
+    this->setIs_hot(info->getIs_hot());
+    this->setIs_special_price(info->getIs_special_price());
+    this->setType_id(info->getType_id());
+    this->setDesc(info->getDesc());
+
+    m_nAddedCount = addedCount;
+    m_strRemarks = remarks;
 }
 
-void CookBookSelectedInfo::setId(int nId)
+CookBookSelectedInfo::CookBookSelectedInfo()
 {
-    m_nId = nId;
-}
 
-int CookBookSelectedInfo::classilyId() const
-{
-    return m_nClassilyId;
-}
-
-void CookBookSelectedInfo::setClassilyId(int nClassilyId)
-{
-    m_nClassilyId = nClassilyId;
-}
-
-QString CookBookSelectedInfo::name() const
-{
-    return m_strName;
-}
-
-void CookBookSelectedInfo::setName(const QString &strName)
-{
-    m_strName = strName;
-}
-
-QString CookBookSelectedInfo::imageUrl() const
-{
-    return m_strImageUrl;
-}
-
-void CookBookSelectedInfo::setImageUrl(const QString &strImageUrl)
-{
-    m_strImageUrl = strImageUrl;
 }
 
 int CookBookSelectedInfo::addedCount() const
@@ -72,12 +48,3 @@ void CookBookSelectedInfo::setRemarks(const QString &strRemarks)
     m_strRemarks = strRemarks;
 }
 
-float CookBookSelectedInfo::price() const
-{
-    return m_fPrice;
-}
-
-void CookBookSelectedInfo::setPrice(float fPrice)
-{
-    m_fPrice = fPrice;
-}

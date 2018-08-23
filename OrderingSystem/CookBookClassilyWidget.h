@@ -24,7 +24,7 @@ public:
     explicit CookBookClassilyWidget(QVector<CookBookItemInfo*> CookBookItemInfoList, QWidget *parent = 0);
     ~CookBookClassilyWidget();
 
-    void setCookBookSelectedCount(int id, int nCount);
+    void setCookBookSelectedCount(QString id, int nCount);
 
 signals:
     void addCook(CookBookSelectedInfo *pCookBookSelectedInfo);
@@ -37,7 +37,7 @@ private:
 
 private:
     QGridLayout *m_pGridLayout;
-    QMap<int, CookBookItemWidget*> m_oCookBookItemMap;
+    QMap<QString, CookBookItemWidget*> m_oCookBookItemMap;
     QVector<CookBookItemInfo*> m_oCookBookItemInfoList;
 
     CookBooikFlipPageBar *m_pCookBooikFlipPageBar;

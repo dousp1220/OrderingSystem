@@ -27,7 +27,7 @@ void SelectedOrderFormModel::updateView()
 
 void SelectedOrderFormModel::addCook(CookBookSelectedInfo *pCookBookSelectedInfo)
 {
-    int index = findCookBookItem(pCookBookSelectedInfo->id());
+    int index = findCookBookItem(pCookBookSelectedInfo->getMenu_id());
 
     if (index == -1)
     {
@@ -47,7 +47,7 @@ void SelectedOrderFormModel::clearDate()
     for (int i = m_oCookBookSelectedInfoList.count() - 1; i >= 0; --i)
     {
         //清空选择窗口上的已选信息
-        emit cookBookCountChanged(m_oCookBookSelectedInfoList[i]->id(), m_oCookBookSelectedInfoList[i]->classilyId(), 0);
+        emit cookBookCountChanged(m_oCookBookSelectedInfoList[i]->getMenu_id(), m_oCookBookSelectedInfoList[i]->getType_id(), 0);
         delete m_oCookBookSelectedInfoList[i];
         m_oCookBookSelectedInfoList.remove(i);
     }
@@ -60,11 +60,11 @@ void SelectedOrderFormModel::init()
                   << QStringLiteral("单价") << QStringLiteral("备注");
 }
 
-int SelectedOrderFormModel::findCookBookItem(int id)
+int SelectedOrderFormModel::findCookBookItem(QString id)
 {
     for (int i = 0; i < m_oCookBookSelectedInfoList.count(); ++i)
     {
-        if (m_oCookBookSelectedInfoList[i]->id() == id)
+        if (m_oCookBookSelectedInfoList[i]->getMenu_id() == id)
         {
             return i;
         }
@@ -106,11 +106,11 @@ QVariant SelectedOrderFormModel::data(const QModelIndex &index, int role) const
 //        case EN_image:
 //            return QPixmap(pCookBookSelectedInfo->imageUrl());
         case EN_name:
-            return pCookBookSelectedInfo->name();
+            return pCookBookSelectedInfo->getMenu_name();
         case EN_count:
             return pCookBookSelectedInfo->addedCount();
         case EN_price:
-            return pCookBookSelectedInfo->price();
+            return pCookBookSelectedInfo->getPrice();
 //        case EN_total:
 //            return pCookBookSelectedInfo->price() * pCookBookSelectedInfo->addedCount();
         case EN_Remarks:
@@ -174,7 +174,7 @@ bool SelectedOrderFormModel::setData(const QModelIndex &index, const QVariant &v
             pCookBookSelectedInfo->setAddedCount(value.toInt());
 
             //改变选择窗口的已选信息
-            emit cookBookCountChanged(pCookBookSelectedInfo->id(), pCookBookSelectedInfo->classilyId(), value.toInt());
+            emit cookBookCountChanged(pCookBookSelectedInfo->getMenu_id(), pCookBookSelectedInfo->getType_id(), value.toInt());
             if (value.toInt() == 0)
             {
                 delete pCookBookSelectedInfo;

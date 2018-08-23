@@ -34,16 +34,15 @@ void SelectedWidget::totalPrice()
 
     for (int i = 0; i < list.count(); ++i)
     {
-        fTotalPrice += list[i]->price() * list[i]->addedCount();
+        fTotalPrice += list[i]->getPrice() * list[i]->addedCount();
     }
     m_pTotalLabel->setText(QString(QStringLiteral("总计：%1元")).arg(fTotalPrice));
 }
 
-void SelectedWidget::onCookBookCountChanged(int id, int classilyId, int nCount)
+void SelectedWidget::onCookBookCountChanged(QString id, QString classilyId, int nCount)
 {
     totalPrice();
     emit cookBookCountChanged(id, classilyId, nCount);
-
 }
 
 void SelectedWidget::onConfirmOrder()
@@ -96,7 +95,7 @@ void SelectedWidget::initDate()
     m_pSeletedListView->setModel(m_pSeletedModel);
     m_pSeletedListView->setItemDelegate(new SelectedOrderFormDelegate(m_pSeletedListView));
 
-    connect(m_pSeletedModel, SIGNAL(cookBookCountChanged(int ,int ,int)), this, SLOT(onCookBookCountChanged(int, int, int)));
+    connect(m_pSeletedModel, SIGNAL(cookBookCountChanged(QString ,QString ,int)), this, SLOT(onCookBookCountChanged(QString, QString, int)));
 
     m_pSeletedListView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_pSeletedListView->setColumnWidth(EN_name, 100);

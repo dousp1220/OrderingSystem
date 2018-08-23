@@ -22,7 +22,7 @@ public:
     ~CookBookMain();
 
 public slots:
-    void onCookBookCountChanged(int id, int classilyId, int nCount);
+    void onCookBookCountChanged(QString id, QString classilyId, int nCount);
     void onAddCookBookClassilyPage();
     void onRemoveCookBookClassilyPage(int index);
 

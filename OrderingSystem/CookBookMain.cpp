@@ -2,6 +2,9 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include "ClassifyBox.h"
+#include "sqlUtils/sqlUntils.h"
+#include "sqlUtils/entity/menuTypeEntity.h"
+#include <QSqlQuery>
 
 CookBookMain::CookBookMain(QWidget *parent) :
     QWidget(parent)
@@ -14,10 +17,18 @@ CookBookMain::~CookBookMain()
 {
 }
 
-void CookBookMain::onCookBookCountChanged(int id, int classilyId, int nCount)
+void CookBookMain::onCookBookCountChanged(QString id, QString classilyId, int nCount)
 {
-    CookBookClassilyWidget * pCookBookClassilyWidget = dynamic_cast<CookBookClassilyWidget *>(m_pStackedWidget->widget(classilyId));
-    pCookBookClassilyWidget->setCookBookSelectedCount(id, nCount);
+    CookBookClassilyWidget * pCookBookClassilyWidget;
+    int count = m_pStackedWidget->count();
+    for (int i = 0; i < count; ++i)
+    {
+        pCookBookClassilyWidget = dynamic_cast<CookBookClassilyWidget *>(m_pStackedWidget->widget(i));
+        if (pCookBookClassilyWidget->property("type_id").compare(classilyId) == 0) {
+            pCookBookClassilyWidget->setCookBookSelectedCount(id, nCount);
+            return;
+        }
+    }
 }
 
 void CookBookMain::onAddCookBookClassilyPage()
@@ -55,33 +66,30 @@ void CookBookMain::init()
 
 void CookBookMain::initDate()
 {
-    for (int i = 0; i < m_pClassifyBox->getClassifyCount(); ++i)
+    QVector<menuTypeEntity *>  typeList =  m_pClassifyBox->getMenuTypeList();
+    for (int i = 0; i < typeList.length(); ++i)
     {
-        QVector<CookBookItemInfo*> infoList;
-        infoList << new CookBookItemInfo(0 + i*22, i,  QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(1 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(2 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(3 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(4 + i*22, i,  QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(5 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(6 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(7 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(8 + i*22, i,  QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(9 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(10 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(11 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(12 + i*22, i,  QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(13 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(14 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(15 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(16 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(17 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(18 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(19 + i*22, i,  QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(20 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(21 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png")
-                 << new CookBookItemInfo(22 + i*22, i, QStringLiteral("猪蹄"), 10+i, ":/res/icon/item.png");
-        CookBookClassilyWidget *pCookBookClassilyWidget = new CookBookClassilyWidget(infoList, this);
+        QSqlQuery query = sqlUntils::getSqlUntils()->execSql(QString("SELECT * FROM menu_item WHERE type_id='%1'").arg(typeList[i]->getType_id()));
+
+        QVector<CookBookItemInfo*> menuInfoList;
+        while(query.next())
+        {
+            CookBookItemInfo *ent = new CookBookItemInfo();
+            ent->setMenu_id(query.value("menu_id").toString());
+            ent->setMenu_name(query.value("menu_name").toString());
+            ent->setMenu_image(query.value("menu_image").toString());
+            ent->setPrice(query.value("price").toFloat());
+            ent->setDesc(query.value("desc").toString());
+            ent->setType_id(query.value("type_id").toString());
+            ent->setIs_special_price(query.value("is_special_price").toBool());
+            ent->setIs_hot(query.value("is_hot").toBool());
+            ent->setNew_price(query.value("new_price").toFloat());
+
+            menuInfoList.append(ent);
+        }
+
+        CookBookClassilyWidget *pCookBookClassilyWidget = new CookBookClassilyWidget(menuInfoList, this);
+        pCookBookClassilyWidget->setProperty("type_id", typeList[i]->getType_id());
         connect(pCookBookClassilyWidget, SIGNAL(addCook(CookBookSelectedInfo *)), this, SIGNAL(addCook(CookBookSelectedInfo*)));
         m_pStackedWidget->addWidget(pCookBookClassilyWidget);
     }

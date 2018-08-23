@@ -21,15 +21,15 @@ void CookBookItemWidget::init()
 {
     m_pImageLabel = new QLabel(this);
     m_pImageLabel->setFixedSize(165, 165);
-    m_pImageLabel->setPixmap(QPixmap(":/res/icon/item.png"));
+    m_pImageLabel->setPixmap(QPixmap(m_pCookBookItemInfo->getMenu_image()));
     m_pImageLabel->setScaledContents(true);
 
     m_pNameLabel = new QLabel(this);
-    m_pNameLabel->setText(QStringLiteral("红烧猪蹄子啊"));
+    m_pNameLabel->setText(m_pCookBookItemInfo->getMenu_name());
     m_pNameLabel->setStyleSheet("font-family: Microsoft YaHei; font-size: 20px; color: #434343;");
     m_pPriceLabel = new QLabel(this);
     m_pPriceLabel->setAlignment(Qt::AlignRight);
-    m_pPriceLabel->setText(QStringLiteral("100元  "));
+    m_pPriceLabel->setText(QString(QStringLiteral("%1元  ")).arg(m_pCookBookItemInfo->getPrice()));
     m_pPriceLabel->setStyleSheet("font-family: Microsoft YaHei; font-size: 18px; color: #000000;");
 
     m_pAddedImageLabel = new QLabel(this);
@@ -73,9 +73,9 @@ void CookBookItemWidget::init()
 
 void CookBookItemWidget::updateList()
 {
-    m_pImageLabel->setPixmap(QPixmap(m_pCookBookItemInfo->imageUrl()));
-    m_pNameLabel->setText(m_pCookBookItemInfo->name());
-    m_pPriceLabel->setText(QString::number(m_pCookBookItemInfo->price()) + QStringLiteral("元  "));
+    m_pImageLabel->setPixmap(QPixmap(m_pCookBookItemInfo->getMenu_image()));
+    m_pNameLabel->setText(m_pCookBookItemInfo->getMenu_name());
+    m_pPriceLabel->setText(QString::number(m_pCookBookItemInfo->getPrice()) + QStringLiteral("元  "));
 }
 
 void CookBookItemWidget::updateSelected()
@@ -124,8 +124,7 @@ void CookBookItemWidget::onAddSelectes()
     //TODO 添加到已选中
     m_nSelectedCount++;
 
-    emit addCook(new CookBookSelectedInfo(m_pCookBookItemInfo->id(), m_pCookBookItemInfo->classilyId(), m_pCookBookItemInfo->name()
-                                          , m_pCookBookItemInfo->price(), m_pCookBookItemInfo->imageUrl(), 1, "haha"));
+    emit addCook(new CookBookSelectedInfo(m_pCookBookItemInfo, 1, "haha"));
 
     updateSelected();
 }

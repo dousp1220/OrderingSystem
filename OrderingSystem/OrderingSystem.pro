@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     SelectedOrderFormModel.cpp \
     CookBookSelectedInfo.cpp \
     Common.cpp \
-    SelectedOrderFormDelegate.cpp
+    SelectedOrderFormDelegate.cpp \
+    sqlUtils/sqlUntils.cpp
 
 HEADERS  += MainWidget.h \
     OreringWidget.h \
@@ -43,7 +44,12 @@ HEADERS  += MainWidget.h \
     SelectedOrderFormModel.h \
     CookBookSelectedInfo.h \
     Common.h \
-    SelectedOrderFormDelegate.h
+    SelectedOrderFormDelegate.h \
+    sqlUtils/sqlUntils.h \
+    sqlUtils/entity/menuTypeEntity.h \
+    sqlUtils/entity/menuItemEntity.h \
+    sqlUtils/entity/orderEntity.h \
+    sqlUtils/entity/orderDetailRelaEntity.h
 
 FORMS +=
 
