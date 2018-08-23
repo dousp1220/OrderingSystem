@@ -19,10 +19,13 @@ void CookBookClassilyWidget::setCookBookSelectedCount(QString id, int nCount)
     m_oCookBookItemMap[id]->setSelectedCount(nCount);
 }
 
+bool CookBookClassilyWidget::hasMenuItem(QString id)
+{
+    return m_oCookBookItemMap.find(id) != m_oCookBookItemMap.end();
+}
+
 void CookBookClassilyWidget::init()
 {
-//    m_oCookBookItemInfoList;
-
     QVector<CookBookItemInfo*>::iterator iter = m_oCookBookItemInfoList.begin();
     while(iter != m_oCookBookItemInfoList.end())
     {
@@ -30,7 +33,7 @@ void CookBookClassilyWidget::init()
         CookBookItemWidget *pCookBookItemWidget = new CookBookItemWidget(pCookBookItemInfo, this);
 
         m_oCookBookItemMap[pCookBookItemInfo->getMenu_id()] = pCookBookItemWidget;
-        connect(pCookBookItemWidget, SIGNAL(addCook(CookBookSelectedInfo *)), this, SIGNAL(addCook(CookBookSelectedInfo*)));
+        connect(pCookBookItemWidget, SIGNAL(addCook(CookBookItemInfo *)), this, SIGNAL(addCook(CookBookItemInfo*)));
 
         iter++;
     }

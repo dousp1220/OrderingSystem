@@ -10,12 +10,10 @@ SelectedOrderFormModel::SelectedOrderFormModel(QObject *parent)
 
 SelectedOrderFormModel::~SelectedOrderFormModel()
 {
-    QVector<CookBookSelectedInfo*>::Iterator iter = m_oCookBookSelectedInfoList.begin();
-    while(iter != m_oCookBookSelectedInfoList.end())
+    for (int i = m_oCookBookSelectedInfoList.count() - 1; i >= 0; --i)
     {
-        CookBookSelectedInfo *p = *iter;
-        delete p;
-        iter++;
+        delete m_oCookBookSelectedInfoList[i];
+        m_oCookBookSelectedInfoList.remove(i);
     }
 }
 
@@ -25,20 +23,24 @@ void SelectedOrderFormModel::updateView()
     endResetModel();
 }
 
-void SelectedOrderFormModel::addCook(CookBookSelectedInfo *pCookBookSelectedInfo)
+void SelectedOrderFormModel::addCook(CookBookItemInfo *pCookBookItemInfo)
 {
-    int index = findCookBookItem(pCookBookSelectedInfo->getMenu_id());
+    int index = findCookBookItem(pCookBookItemInfo->getMenu_id());
 
     if (index == -1)
     {
+        //当前没有创建一个
+        CookBookSelectedInfo *pCookBookSelectedInfo = new CookBookSelectedInfo(pCookBookItemInfo, 1, "");
         m_oCookBookSelectedInfoList.append(pCookBookSelectedInfo);
+        emit cookBookCountChanged(pCookBookSelectedInfo->getMenu_id(), pCookBookSelectedInfo->getType_id(), 1);
     }
     else
     {
-        delete pCookBookSelectedInfo;
         CookBookSelectedInfo *p = m_oCookBookSelectedInfoList[index];
         p->setAddedCount(p->addedCount() + 1);
+        emit cookBookCountChanged(p->getMenu_id(), p->getType_id(), p->addedCount());
     }
+
     updateView();
 }
 
@@ -177,8 +179,8 @@ bool SelectedOrderFormModel::setData(const QModelIndex &index, const QVariant &v
             emit cookBookCountChanged(pCookBookSelectedInfo->getMenu_id(), pCookBookSelectedInfo->getType_id(), value.toInt());
             if (value.toInt() == 0)
             {
-                delete pCookBookSelectedInfo;
                 m_oCookBookSelectedInfoList.remove(index.row());
+                delete pCookBookSelectedInfo;
                 updateView();
             }
             break;

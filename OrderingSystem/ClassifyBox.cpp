@@ -111,6 +111,7 @@ void ClassifyBox::init()
         ent->setType_id(query.value("type_id").toString());
         ent->setType_name(query.value("type_name").toString());
         ent->setImage(query.value("image").toString());
+        ent->setHot_flag(query.value("hot_flag").toInt());
 
         m_pClassilyTypeEntityList.append(ent);
 

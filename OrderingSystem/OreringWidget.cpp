@@ -20,7 +20,7 @@ void OrderingWidget::init()
     m_pSelectedWidget = new SelectedWidget(this);
     m_pCookBookMainWidget = new CookBookMain(this);
 
-    connect(m_pCookBookMainWidget, SIGNAL(addCook(CookBookSelectedInfo *)), m_pSelectedWidget, SLOT(onAddCook(CookBookSelectedInfo*)));
+    connect(m_pCookBookMainWidget, SIGNAL(addCook(CookBookItemInfo *)), m_pSelectedWidget, SLOT(onAddCook(CookBookItemInfo*)));
     connect(m_pSelectedWidget, SIGNAL(cookBookCountChanged(QString ,QString ,int)), m_pCookBookMainWidget, SLOT(onCookBookCountChanged(QString, QString, int)));
 
     QHBoxLayout *pMainLayout = new QHBoxLayout;

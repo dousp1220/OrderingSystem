@@ -30,7 +30,7 @@ public slots:
     void setSelectedCount(int selectedCount);
 
 signals:
-    void addCook(CookBookSelectedInfo *pCookBookSelectedInfo);
+    void addCook(CookBookItemInfo *pCookBookItemInfo);
 
 private:
     void init();

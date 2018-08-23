@@ -124,7 +124,7 @@ void CookBookItemWidget::onAddSelectes()
     //TODO 添加到已选中
     m_nSelectedCount++;
 
-    emit addCook(new CookBookSelectedInfo(m_pCookBookItemInfo, 1, "haha"));
+    emit addCook(m_pCookBookItemInfo);
 
-    updateSelected();
+//    updateSelected();
 }

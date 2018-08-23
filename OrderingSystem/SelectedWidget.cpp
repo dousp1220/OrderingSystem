@@ -20,9 +20,9 @@ SelectedWidget::~SelectedWidget()
 {
 }
 
-void SelectedWidget::onAddCook(CookBookSelectedInfo *pCookBookSelectedInfo)
+void SelectedWidget::onAddCook(CookBookItemInfo *pCookBookItemInfo)
 {
-    m_pSeletedModel->addCook(pCookBookSelectedInfo);
+    m_pSeletedModel->addCook(pCookBookItemInfo);
     totalPrice();
 }
 

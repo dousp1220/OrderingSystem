@@ -9,6 +9,7 @@ private:
     QString type_id;
     QString type_name;
     QString image;
+    int hot_flag;
 
 public:
     QString getType_name() const
@@ -39,6 +40,16 @@ public:
     void setType_id(const QString &value)
     {
         type_id = value;
+    }
+
+    int getHot_flag() const
+    {
+        return hot_flag;
+    }
+
+    void setHot_flag(int value)
+    {
+        hot_flag = value;
     }
 };
 

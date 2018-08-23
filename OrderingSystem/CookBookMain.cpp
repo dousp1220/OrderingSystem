@@ -5,6 +5,7 @@
 #include "sqlUtils/sqlUntils.h"
 #include "sqlUtils/entity/menuTypeEntity.h"
 #include <QSqlQuery>
+#include <QDebug>
 
 CookBookMain::CookBookMain(QWidget *parent) :
     QWidget(parent)
@@ -24,19 +25,23 @@ void CookBookMain::onCookBookCountChanged(QString id, QString classilyId, int nC
     for (int i = 0; i < count; ++i)
     {
         pCookBookClassilyWidget = dynamic_cast<CookBookClassilyWidget *>(m_pStackedWidget->widget(i));
-        if (pCookBookClassilyWidget->property("type_id").compare(classilyId) == 0) {
+        if (pCookBookClassilyWidget->hasMenuItem(id)) {
             pCookBookClassilyWidget->setCookBookSelectedCount(id, nCount);
-            return;
+//            return;
         }
+
+//        if (pCookBookClassilyWidget->property("type_id").compare(classilyId) == 0) {
+//            pCookBookClassilyWidget->setCookBookSelectedCount(id, nCount);
+////            return;
+//        }
     }
 }
 
 void CookBookMain::onAddCookBookClassilyPage()
 {
     QVector<CookBookItemInfo*> infoList;
-//    infoList << new CookBookItemInfo(100, 8,  QStringLiteral("猪蹄"), 55, ":/res/icon/item.png");
     CookBookClassilyWidget *pCookBookClassilyWidget = new CookBookClassilyWidget(infoList, this);
-    connect(pCookBookClassilyWidget, SIGNAL(addCook(CookBookSelectedInfo *)), this, SIGNAL(addCook(CookBookSelectedInfo*)));
+    connect(pCookBookClassilyWidget, SIGNAL(addCook(CookBookItemInfo *)), this, SIGNAL(addCook(CookBookItemInfo*)));
     m_pStackedWidget->addWidget(pCookBookClassilyWidget);
 }
 
@@ -69,7 +74,16 @@ void CookBookMain::initDate()
     QVector<menuTypeEntity *>  typeList =  m_pClassifyBox->getMenuTypeList();
     for (int i = 0; i < typeList.length(); ++i)
     {
-        QSqlQuery query = sqlUntils::getSqlUntils()->execSql(QString("SELECT * FROM menu_item WHERE type_id='%1'").arg(typeList[i]->getType_id()));
+        QSqlQuery query;
+        if (typeList[i]->getHot_flag() != 0)
+        {
+            query = sqlUntils::getSqlUntils()->execSql(QString("SELECT * FROM menu_item WHERE hot_flag=%1 OR type_id='%2'")
+                                                       .arg(typeList[i]->getHot_flag()).arg(typeList[i]->getType_id()));
+        }
+        else
+        {
+             query = sqlUntils::getSqlUntils()->execSql(QString("SELECT * FROM menu_item WHERE type_id='%1'").arg(typeList[i]->getType_id()));
+        }
 
         QVector<CookBookItemInfo*> menuInfoList;
         while(query.next())
@@ -82,7 +96,7 @@ void CookBookMain::initDate()
             ent->setDesc(query.value("desc").toString());
             ent->setType_id(query.value("type_id").toString());
             ent->setIs_special_price(query.value("is_special_price").toBool());
-            ent->setIs_hot(query.value("is_hot").toBool());
+            ent->setHot_flag(query.value("hot_flag").toBool());
             ent->setNew_price(query.value("new_price").toFloat());
 
             menuInfoList.append(ent);
@@ -90,7 +104,7 @@ void CookBookMain::initDate()
 
         CookBookClassilyWidget *pCookBookClassilyWidget = new CookBookClassilyWidget(menuInfoList, this);
         pCookBookClassilyWidget->setProperty("type_id", typeList[i]->getType_id());
-        connect(pCookBookClassilyWidget, SIGNAL(addCook(CookBookSelectedInfo *)), this, SIGNAL(addCook(CookBookSelectedInfo*)));
+        connect(pCookBookClassilyWidget, SIGNAL(addCook(CookBookItemInfo *)), this, SIGNAL(addCook(CookBookItemInfo*)));
         m_pStackedWidget->addWidget(pCookBookClassilyWidget);
     }
     m_pStackedWidget->setCurrentIndex(0);

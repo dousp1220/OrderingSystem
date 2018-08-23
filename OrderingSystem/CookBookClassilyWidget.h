@@ -25,9 +25,10 @@ public:
     ~CookBookClassilyWidget();
 
     void setCookBookSelectedCount(QString id, int nCount);
+    bool hasMenuItem(QString id);
 
 signals:
-    void addCook(CookBookSelectedInfo *pCookBookSelectedInfo);
+    void addCook(CookBookItemInfo *pCookBookItemInfo);
 
 public slots:
     void updateLayout(int page);

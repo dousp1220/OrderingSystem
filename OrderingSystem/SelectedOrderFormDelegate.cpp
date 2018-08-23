@@ -18,7 +18,7 @@ QWidget *SelectedOrderFormDelegate::createEditor(QWidget *parent, const QStyleOp
         QSpinBox *editor =  new  QSpinBox(parent);
         editor->setMinimum(0);
         editor->setMaximum(100);
-        return  editor;
+        return editor;
     }
     case EN_Remarks:
     {

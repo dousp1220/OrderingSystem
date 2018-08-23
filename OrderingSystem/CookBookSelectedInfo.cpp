@@ -14,7 +14,7 @@ CookBookSelectedInfo::CookBookSelectedInfo(CookBookItemInfo *info, int addedCoun
     this->setMenu_image(info->getMenu_image());
     this->setPrice(info->getPrice());
     this->setNew_price(info->getNew_price());
-    this->setIs_hot(info->getIs_hot());
+    this->setHot_flag(info->getHot_flag());
     this->setIs_special_price(info->getIs_special_price());
     this->setType_id(info->getType_id());
     this->setDesc(info->getDesc());

@@ -27,7 +27,7 @@ public slots:
     void onRemoveCookBookClassilyPage(int index);
 
 signals:
-    void addCook(CookBookSelectedInfo*);
+    void addCook(CookBookItemInfo*);
 
 private:
     void init();

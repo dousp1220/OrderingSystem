@@ -23,7 +23,7 @@ public:
     ~SelectedWidget();
 
 public slots:
-    void onAddCook(CookBookSelectedInfo* pCookBookSelectedInfo);
+    void onAddCook(CookBookItemInfo* pCookBookItemInfo);
     void totalPrice();
     void onCookBookCountChanged(QString id, QString classilyId, int nCount);
     void onConfirmOrder();

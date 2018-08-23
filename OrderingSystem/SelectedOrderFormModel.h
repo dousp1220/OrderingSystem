@@ -24,7 +24,7 @@ signals:
     void cookBookCountChanged(QString id, QString classilyId, int nCount);
 
 public slots:
-    void addCook(CookBookSelectedInfo *pCookBookSelectedInfo);
+    void addCook(CookBookItemInfo *pCookBookItemInfo);
     void clearDate();
 
 private:

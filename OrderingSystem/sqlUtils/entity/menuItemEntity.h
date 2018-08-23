@@ -69,13 +69,13 @@ public:
         is_special_price = value;
     }
 
-    bool getIs_hot() const
+    int getHot_flag() const
     {
-        return is_hot;
+        return hot_flag;
     }
-    void setIs_hot(bool value)
+    void setHot_flag(int value)
     {
-        is_hot = value;
+        hot_flag = value;
     }
 
     float getNew_price() const
@@ -97,7 +97,7 @@ private:
     QString type_id;
 
     bool is_special_price;
-    bool is_hot;
+    int hot_flag;
     float new_price;
 };
 
