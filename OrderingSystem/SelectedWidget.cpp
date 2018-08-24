@@ -8,6 +8,7 @@
 #include "sqlUtils/sqlUntils.h"
 #include <QSqlQuery>
 #include <QMessageBox>
+#include <QDateTime>
 
 SelectedWidget::SelectedWidget(QWidget *parent) :
     QWidget(parent)
@@ -56,9 +57,10 @@ void SelectedWidget::onConfirmOrder()
 
     QString order_id = sqlUntils::getSqlUntils()->getGUID();
     bool isSuccess = sqlUntils::getSqlUntils()->execSql(QString(
-        "insert into order_item (order_id, discount, offer_count, wipe_zero, orig_price_count, real_price_count, table_num)\
-         values ('%1', %2, %3, %4, %5, %6, %7)")
-        .arg(order_id).arg(m_fTotalPrice).arg(0).arg(0).arg(m_fTotalPrice).arg(m_fTotalPrice).arg(12));
+        "insert into order_item (order_id, discount, offer_count, wipe_zero, orig_price_count, real_price_count, table_num, insert_date)\
+         values ('%1', %2, %3, %4, %5, %6, %7, '%8')")
+        .arg(order_id).arg(m_fTotalPrice).arg(0).arg(0).arg(m_fTotalPrice).arg(m_fTotalPrice).arg(12)
+        .arg(dateTimeToString(QDateTime::currentDateTime())));
 
     if (!isSuccess)
     {
@@ -88,6 +90,7 @@ void SelectedWidget::onConfirmOrder()
         }
     }
     QMessageBox::about(this, QStringLiteral("提示"), QStringLiteral("下单成功！"));
+    onCancelOrder();
 }
 
 void SelectedWidget::onCancelOrder()

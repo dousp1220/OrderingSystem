@@ -87,6 +87,16 @@ public:
         remarks = value;
     }
 
+    uint orderItemEntity::getTimeStamp() const
+    {
+        return timeStamp;
+    }
+
+    void orderItemEntity::setTimeStamp(const uint &value)
+    {
+        timeStamp = value;
+    }
+
 private:
     QString order_id;
     float discount;
@@ -96,6 +106,7 @@ private:
     float real_price_count;
     int table_num;
     QString remarks;
+    uint timeStamp;
 };
 
 #endif // ORDERENTITY_H
