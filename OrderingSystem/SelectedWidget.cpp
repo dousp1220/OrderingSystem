@@ -5,9 +5,13 @@
 #include <QHeaderView>
 #include "Common.h"
 #include "SelectedOrderFormDelegate.h"
+#include "sqlUtils/sqlUntils.h"
+#include <QSqlQuery>
+#include <QMessageBox>
 
 SelectedWidget::SelectedWidget(QWidget *parent) :
     QWidget(parent)
+    , m_fTotalPrice(0)
 {
     this->setFixedWidth(400);
     this->setAttribute(Qt::WA_StyledBackground, true);
@@ -36,6 +40,7 @@ void SelectedWidget::totalPrice()
     {
         fTotalPrice += list[i]->getPrice() * list[i]->addedCount();
     }
+    m_fTotalPrice = fTotalPrice;
     m_pTotalLabel->setText(QString(QStringLiteral("总计：%1元")).arg(fTotalPrice));
 }
 
@@ -47,7 +52,42 @@ void SelectedWidget::onCookBookCountChanged(QString id, QString classilyId, int 
 
 void SelectedWidget::onConfirmOrder()
 {
+    QVector<CookBookSelectedInfo *> list = m_pSeletedModel->cookBookSelectedInfoList();
 
+    QString order_id = sqlUntils::getSqlUntils()->getGUID();
+    bool isSuccess = sqlUntils::getSqlUntils()->execSql(QString(
+        "insert into order_item (order_id, discount, offer_count, wipe_zero, orig_price_count, real_price_count, table_num)\
+         values ('%1', %2, %3, %4, %5, %6, %7)")
+        .arg(order_id).arg(m_fTotalPrice).arg(0).arg(0).arg(m_fTotalPrice).arg(m_fTotalPrice).arg(12));
+
+    if (!isSuccess)
+    {
+        QMessageBox::about(this, QStringLiteral("错误"), QStringLiteral("下单错误，请重试！"));
+        return;
+    }
+
+    QString sql = "insert into order_detail_rela (relaton_id, count, remark, order_id, menu_id) values";
+    for (int i = 0; i < list.length(); ++i)
+    {
+        CookBookSelectedInfo* info = list[i];
+        QString id = sqlUntils::getSqlUntils()->getGUID();
+        if (i != 0)
+        {
+            sql+=",";
+        }
+        sql += QString(" ('%1', %2, '%3', '%4', '%5')")
+            .arg(id).arg(info->addedCount()).arg(info->remarks()).arg(order_id).arg(info->getMenu_id());
+    }
+    if (list.length() > 0)
+    {
+        if (!sqlUntils::getSqlUntils()->execSql(sql))
+        {
+            QMessageBox::about(this, QStringLiteral("错误"), QStringLiteral("下单错误，请重试！"));
+            sqlUntils::getSqlUntils()->execSql(QString("delete FROM order_item where order_id='%1'").arg(order_id));
+            return;
+        }
+    }
+    QMessageBox::about(this, QStringLiteral("提示"), QStringLiteral("下单成功！"));
 }
 
 void SelectedWidget::onCancelOrder()

@@ -1,6 +1,7 @@
 ﻿#include "CookBookItemWidget.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QMessageBox>
 
 CookBookItemWidget::CookBookItemWidget(CookBookItemInfo *pCookBookItemInfo, QWidget *parent)
     : QWidget(parent)
@@ -117,6 +118,7 @@ void CookBookItemWidget::setCookBookItemInfo(CookBookItemInfo *pCookBookItemInfo
 void CookBookItemWidget::onCookBookDetail()
 {
     //TODO 查看菜品详情
+    QMessageBox::about(nullptr, m_pCookBookItemInfo->getMenu_name() + QStringLiteral("-详情"), m_pCookBookItemInfo->getDesc());
 }
 
 void CookBookItemWidget::onAddSelectes()

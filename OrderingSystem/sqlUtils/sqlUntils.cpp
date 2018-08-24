@@ -75,16 +75,36 @@ QString sqlUntils::getError()
     return e.text();
 }
 
-QSqlQuery sqlUntils::execSql(QString sql)
+QSqlQuery sqlUntils::execSqlSelect(QString sql)
 {
     assert(sql.length() != 0);
 
     QSqlQuery query(db);
+    qDebug() << sql;
 
     if (query.exec(sql))
     {
         return query;
     }
+    //错误直接获取错误，打印出来
+    getError();
 
     return QSqlQuery();
+}
+
+bool sqlUntils::execSql(QString sql)
+{
+    assert(sql.length() != 0);
+
+    QSqlQuery query(db);
+    qDebug() << sql;
+
+    if (query.exec(sql))
+    {
+        return true;
+    }
+    //错误直接获取错误，打印出来
+    getError();
+
+    return false;
 }

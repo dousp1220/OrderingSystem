@@ -20,6 +20,8 @@ CookBookMain::~CookBookMain()
 
 void CookBookMain::onCookBookCountChanged(QString id, QString classilyId, int nCount)
 {
+    Q_UNUSED(classilyId);
+
     CookBookClassilyWidget * pCookBookClassilyWidget;
     int count = m_pStackedWidget->count();
     for (int i = 0; i < count; ++i)
@@ -77,12 +79,12 @@ void CookBookMain::initDate()
         QSqlQuery query;
         if (typeList[i]->getHot_flag() != 0)
         {
-            query = sqlUntils::getSqlUntils()->execSql(QString("SELECT * FROM menu_item WHERE hot_flag=%1 OR type_id='%2'")
+            query = sqlUntils::getSqlUntils()->execSqlSelect(QString("SELECT * FROM menu_item WHERE hot_flag=%1 OR type_id='%2'")
                                                        .arg(typeList[i]->getHot_flag()).arg(typeList[i]->getType_id()));
         }
         else
         {
-             query = sqlUntils::getSqlUntils()->execSql(QString("SELECT * FROM menu_item WHERE type_id='%1'").arg(typeList[i]->getType_id()));
+             query = sqlUntils::getSqlUntils()->execSqlSelect(QString("SELECT * FROM menu_item WHERE type_id='%1'").arg(typeList[i]->getType_id()));
         }
 
         QVector<CookBookItemInfo*> menuInfoList;

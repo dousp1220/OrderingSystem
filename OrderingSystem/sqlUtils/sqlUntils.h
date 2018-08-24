@@ -20,7 +20,19 @@ public:
     bool openDb();
     void closeDb();
 
-    QSqlQuery execSql(QString sql);
+    /**
+     * @brief execSql  主要用于查询，查询需要返回查询结果
+     * @param sql
+     * @return
+     */
+    QSqlQuery execSqlSelect(QString sql);
+
+    /**
+     * @brief execSql 主要用于新增，修改，删除
+     * @param sql
+     * @return
+     */
+    bool execSql(QString sql);
 
     QString getError();
 

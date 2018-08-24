@@ -41,6 +41,7 @@ private:
     SelectedOrderFormModel *m_pSeletedModel;
 
     QLabel *m_pTotalLabel;
+    float m_fTotalPrice;
 
     QPushButton *m_pConfirmBtn;
     QPushButton *m_pCancelBtn;

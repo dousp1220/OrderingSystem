@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80003
 File Encoding         : 65001
 
-Date: 2018-08-23 16:11:53
+Date: 2018-08-24 10:43:06
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -68,24 +68,6 @@ INSERT INTO `menu_type` VALUES ('9069ae504d554c0ca3278c5d8c9b225e', '小吃', ''
 INSERT INTO `menu_type` VALUES ('e4dc639cdddc4b9c8487e2d8d29905cd', '推荐', '', '1', '1');
 
 -- ----------------------------
--- Table structure for order
--- ----------------------------
-DROP TABLE IF EXISTS `order`;
-CREATE TABLE `order` (
-  `order_id` varchar(32) NOT NULL,
-  `discount` float DEFAULT NULL,
-  `offer_count` float DEFAULT NULL,
-  `wipe_zero` float DEFAULT NULL,
-  `orig_price_count` float DEFAULT NULL,
-  `real_price_count` float DEFAULT NULL,
-  PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of order
--- ----------------------------
-
--- ----------------------------
 -- Table structure for order_detail_rela
 -- ----------------------------
 DROP TABLE IF EXISTS `order_detail_rela`;
@@ -101,3 +83,26 @@ CREATE TABLE `order_detail_rela` (
 -- ----------------------------
 -- Records of order_detail_rela
 -- ----------------------------
+INSERT INTO `order_detail_rela` VALUES ('5b8bd04a1ac2424cb9d740bf65521ede', '1', '', '72e03284215e4fecb2c19c07209e9e1d', '3d0f739716e74352a798fcce0f8d36ee');
+INSERT INTO `order_detail_rela` VALUES ('fc6fa2194dd940c1a13a91db57d88329', '1', '', '72e03284215e4fecb2c19c07209e9e1d', '3d0f739716e74352a798fcce0f8d36ef');
+
+-- ----------------------------
+-- Table structure for order_item
+-- ----------------------------
+DROP TABLE IF EXISTS `order_item`;
+CREATE TABLE `order_item` (
+  `order_id` varchar(32) NOT NULL,
+  `discount` float DEFAULT NULL,
+  `offer_count` float DEFAULT NULL,
+  `wipe_zero` float DEFAULT NULL,
+  `orig_price_count` float DEFAULT NULL,
+  `real_price_count` float DEFAULT NULL,
+  `table_num` int(11) DEFAULT NULL,
+  `remarks` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of order_item
+-- ----------------------------
+INSERT INTO `order_item` VALUES ('72e03284215e4fecb2c19c07209e9e1d', '100', '0', '0', '100', '100', '12', null);

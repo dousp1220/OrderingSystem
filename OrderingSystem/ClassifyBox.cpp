@@ -103,7 +103,7 @@ void ClassifyBox::onEditClassily()
 
 void ClassifyBox::init()
 {
-    QSqlQuery query = sqlUntils::getSqlUntils()->execSql("SELECT * FROM menu_type ORDER BY sort_index ASC");
+    QSqlQuery query = sqlUntils::getSqlUntils()->execSqlSelect("SELECT * FROM menu_type ORDER BY sort_index ASC");
 
     while(query.next())
     {
