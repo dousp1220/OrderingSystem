@@ -33,6 +33,7 @@ public:
 private:
     QSqlDatabase m_pDB;
     QString m_sDatabaseName;
+	
     static GLXSqlUtils *m_pSql;
 };
 
